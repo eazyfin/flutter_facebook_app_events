@@ -12,8 +12,9 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
         // Required for FB SDK 9.0, as it does not initialize the SDK automatically any more.
         // See: https://developers.facebook.com/blog/post/2021/01/19/introducing-facebook-platform-sdk-version-9/
         // "Removal of Auto Initialization of SDK" section
-        ApplicationDelegate.shared.initializeSDK()
-
+        Settings.isAutoInitEnabled = true
+        ApplicationDelegate.initializeSDK(nil)
+        
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
