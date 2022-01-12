@@ -55,11 +55,46 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
         case "setAdvertiserTracking":
             handleSetAdvertiserTracking(call, result: result)
             break
+        case "initFBLinks":
+            print("FB APP LINK launched")
+            handleFBAppLinks(call, result: result)
+            break
         default:
             result(FlutterMethodNotImplemented)
         }
     }
 
+    private func handleFBAppLinks(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    print("FB APP LINKS Starting ")
+
+    AppLinkUtility.fetchDeferredAppLink { (url, error) in
+        if let error = error {
+          print("Received error while fetching deferred app link %@", error)
+          result(nil);
+        }
+
+        if let url = url {
+          print("FB APP LINKS getting url: ", String(url.absoluteString) )
+
+          var mapData : [String: String?] = ["deeplink": url.absoluteString, "promotionalCode": nil]
+          
+          if let code = AppLinkUtility.appInvitePromotionCode(from: url) {
+            print("promotional code " + String(code))
+            mapData["promotionalCode"] = code
+          } else { // nil
+          }
+
+          if #available(iOS 10, *) {
+            result(mapData)
+          } else {
+            result(mapData)
+          }
+        }else{
+          // no deep link received
+          result(nil)
+        }
+    }
+  }
     private func handleClearUserData(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         AppEvents.clearUserData()
         result(nil)
