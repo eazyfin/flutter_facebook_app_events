@@ -69,8 +69,17 @@ class FacebookAppEvents {
     return _channel.invokeMethod<String>('getAnonymousId');
   }
 
-  Future<String?> initFBLinks() {
-    return _channel.invokeMethod<String>('initFBLinks');
+  Future<dynamic> initFBLinks() async {
+    try {
+      var data = await _channel.invokeMethod('initFBLinks');
+
+      if (data == null) return null;
+
+      final Map<String, dynamic> result = new Map.from(data);
+      return result;
+    } catch (e) {
+      return null;
+    }
   }
 
   /// Log an app event with the specified [name] and the supplied [parameters] value.
