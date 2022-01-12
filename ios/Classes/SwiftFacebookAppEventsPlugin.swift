@@ -5,6 +5,7 @@ import FBSDKCoreKit_Basics
 import FBAudienceNetwork
 
 public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
+
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter.oddbit.id/facebook_app_events", binaryMessenger: registrar.messenger())
         let instance = SwiftFacebookAppEventsPlugin()
@@ -16,7 +17,18 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
 
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
-
+ public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    print("FB APP LINKS getting url: ", String(url.absoluteString) )
+    return self.handleLink(url.absoluteString)
+  }
+private func handleLink(_ link: String) -> Bool {
+    guard let eventSink = _eventSink else {
+      _queuedLinks.append(link)
+      return false
+    }
+    eventSink(link)
+    return true
+  }
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "clearUserData":
