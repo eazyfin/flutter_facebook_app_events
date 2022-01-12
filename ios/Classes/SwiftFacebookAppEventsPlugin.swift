@@ -72,7 +72,10 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
           print("Received error while fetching deferred app link %@", error)
           result(nil);
         }
-
+        if let url = url {
+          print("Received deferred app link %@", url)
+          result(url.absoluteString);
+        }
         if let url = url {
           print("FB APP LINKS getting url: ", String(url.absoluteString) )
 
