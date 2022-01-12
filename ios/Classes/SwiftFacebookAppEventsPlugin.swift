@@ -19,16 +19,9 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
     }
  public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     print("FB APP LINKS getting url: ", String(url.absoluteString) )
-    return self.handleLink(url.absoluteString)
+    return true;
   }
-private func handleLink(_ link: String) -> Bool {
-    guard let eventSink = _eventSink else {
-      _queuedLinks.append(link)
-      return false
-    }
-    eventSink(link)
-    return true
-  }
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "clearUserData":
