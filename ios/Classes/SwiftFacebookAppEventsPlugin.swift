@@ -12,11 +12,15 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
         // Required for FB SDK 9.0, as it does not initialize the SDK automatically any more.
         // See: https://developers.facebook.com/blog/post/2021/01/19/introducing-facebook-platform-sdk-version-9/
         // "Removal of Auto Initialization of SDK" section
-        ApplicationDelegate.initializeSDK(nil)
+          // Get user consent
+    print("FB APP LINK registering plugin")
+    instance.initializeSDK()
 
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
-
+  public func initializeSDK() {
+      ApplicationDelegate.initializeSDK(nil)
+  }
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "clearUserData":
@@ -72,7 +76,7 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
           print("Received error while fetching deferred app link %@", error)
           result(nil);
         }
-        print("Received deferred app link %@", url)
+    
         if let url = url {
           print("FB APP LINKS getting url: ", String(url.absoluteString) )
 
